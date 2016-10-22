@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for problem in problems %}
+        <div class="col-md-3">
+            <div class="well">
+                <p> Įrenginio vardas: {{ problem.hardware_name }} </p>
+                <p> Problemos aprašymas:</p>
+                <p style="height:75px;"> {{ problem.description }} </p>
+                <p> Ip numeris: {{ problem.ip }} </p>
+                <a href="/editProblem/{{ problem.id }}" class="btn btn-default"> Keisti </a>
+                <a href="/deleteProblem/{{ problem.id }}" class="btn btn-danger"> Šalinti </a>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if problems == null %}
+        <h1> Nesukūrėte jokių problemų </h1>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% if problem != null %}
+            <div class="jumbotron">
+                <div class="container">
+                    <h2> Šiuo metu dirbate prie šios problemos</h2>
+                    <div class="well">
+                        <p> Įrangos pavadinimas: {{ problem.hardware_name }} </p>
+                        <p> Aprašymas: {{ problem.description }} </p>
+                    </div>
+                    <p><a class="btn btn-primary btn-lg" href="/newReport" role="button">Pildyti ataskaitą</a></p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if problem == null %}
+            <h1> Šiuo metu jokios sprendžiamos problemos neturite </h1>
+        {% endif %}
+    </div>
+{% endblock %}

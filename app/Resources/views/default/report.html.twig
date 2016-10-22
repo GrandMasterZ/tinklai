@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form, { 'attr': {'class': 'col-md-4 col-md-offset-4'} }) }}
+
+    <div class="form-group">
+        <label for="exampleInputEmail1"> Įrangos gedimo priežastis </label>
+        {{ form_widget(form.cause, { 'attr': {'class': 'form-control'} })  }}
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputPassword1"> Sprendimo aprašymas bei eiga </label>
+        {{ form_widget(form.solution, { 'attr': {'class': 'form-control'} })  }}
+    </div>
+
+
+    {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'} })  }}
+
+    {{ form_end(form) }}
+
+{% endblock %}

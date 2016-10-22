@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% if error is defined %}
+            <div class="alert alert-danger" role="alert">
+                <h1> {{ error }}</h1>
+            </div>
+            <a href="/currentProblem"> Dabartinė problema </a>
+        {% endif %}
+
+        {% if successMessage is defined %}
+            <div class="alert alert-success">
+                <h1> {{ successMessage }}</h1>
+            </div>
+        {% endif %}
+
+        {% if error is not defined %}
+            <div class="jumbotron">
+                <h1>Sveiki!</h1>
+                <p>Sistemoje jūs prisijungęs kaip
+                    {% if is_granted('ROLE_TECHNICIAN') %}
+                        Technikas
+                    {% elseif is_granted('ROLE_OPERATOR') %}
+                        Operatorius
+                    {% else %}
+                        Vadovas
+                    {% endif %}
+                </p>
+                {% if is_granted('ROLE_TECHNICIAN') %}
+                    <p><a class="btn btn-primary btn-lg" href="/problems" role="button">Problemos</a></p>
+                {% elseif is_granted('ROLE_OPERATOR') %}
+                    <p><a class="btn btn-primary btn-lg" href="/newProblem" role="button">Nauja problema</a></p>
+                {% else %}
+                    Vadovas
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

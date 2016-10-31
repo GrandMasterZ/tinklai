@@ -27,11 +27,16 @@
                     {% if is_granted('ROLE_OPERATOR') %}
                         <li><a href="/newProblem">Pridėti problemą </a></li>
                         <li><a href="/createdProblems"> Sukurtos problemos </a></li>
+                        <li><a href="/users"> Vartotojų sąrašas </a></li>
                     {% endif %}
 
                     {% if is_granted('ROLE_TECHNICIAN') %}
                         <li><a href="/problems">Problemų sąrašas</a></li>
                         <li><a href="/currentProblem">Dabartinė problema</a></li>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_MANAGER') %}
+                        <li><a href="/reports">Ataskaitos</a></li>
                     {% endif %}
                 </ul>
 

@@ -41,17 +41,17 @@ class Problem
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $time_taken;
+    public $time_taken;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $time_fixed;
+    public $time_fixed;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $time_created;
+    public $time_created;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="problems")

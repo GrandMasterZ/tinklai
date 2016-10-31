@@ -26,6 +26,7 @@ class DefaultController extends Controller
         {
             return $this->redirect('/login');
         }
+
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', array(
 
@@ -235,5 +236,80 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', array(
             'error' => $error
         ));
+    }
+
+    /**
+     * @Route("/users", name="userList")
+     */
+    public function users(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
+        if($user == null || !in_array("ROLE_OPERATOR", $roles))
+        {
+            return $this->redirect('/login');
+        }
+
+        $doctrine = $this->getDoctrine();
+        $userRepository = $doctrine->getRepository('AppBundle:User');
+        $users = $userRepository->findAll();
+
+        $query = $userRepository->createQueryBuilder('p')
+            ->where('p.enabled = 0')
+            ->getQuery();
+
+        $disabledUsers = $query->getResult();
+
+        return $this->render('default/users.html.twig', array(
+            'users' => $users,
+            'disabledUsers' => $disabledUsers
+        ));
+    }
+
+    /**
+     * @Route("/activateUser/{userId}", name="activateUser")
+     */
+    public function activate(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
+        if($user == null || !in_array("ROLE_OPERATOR", $roles))
+        {
+            return $this->redirect('/');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $doctrine = $this->getDoctrine();
+        $userId = $request->attributes->get('userId');
+        $userRepository = $doctrine->getRepository('AppBundle:User');
+        $user = $userRepository->find($userId);
+        $user->setEnabled(true);
+        $em->flush();
+        return $this->redirect('/users');
+    }
+
+    /**
+     * @Route("/reports", name="reports")
+     */
+    public function report(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
+        if($user == null || !in_array("ROLE_MANAGER", $roles))
+        {
+            return $this->redirect('/');
+        }
+
+        $doctrine = $this->getDoctrine();
+        $reportRepository = $doctrine->getRepository('AppBundle:Report');
+        $reports = $reportRepository->findAll();
+
+        return $this->render('default/reports.html.twig', array(
+            'reports' => $reports,
+        ));
+
     }
 }

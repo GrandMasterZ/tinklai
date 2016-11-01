@@ -4,27 +4,27 @@
         <body>
             <trans-unit id="1">
                 <source>diff.ago.year</source>
-                <target>prieš metus|prieš %count% metus|prieš %count% metų</target>
+                <target>metus|%count% metus| %count% metų</target>
             </trans-unit>
             <trans-unit id="2">
                 <source>diff.ago.month</source>
-                <target>prieš mėnesį|prieš %count% mėnesius|prieš %count% mėnesių</target>
+                <target> mėnesį| %count% mėnesius| %count% mėnesių</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>diff.ago.day</source>
-                <target>prieš dieną|prieš %count% dienas|prieš %count% dienų</target>
+                <target> dieną| %count% dienas| %count% dienų</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>diff.ago.hour</source>
-                <target>prieš valandą|prieš %count% valandas|prieš %count% valandų</target>
+                <target>valandą| %count% valandas| %count% valandų</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>diff.ago.minute</source>
-                <target>prieš minutę|prieš %count% minutes|prieš %count% minučių</target>
+                <target> minutę| %count% minutes| %count% minučių</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>diff.ago.second</source>
-                <target>prieš sekundę|prieš %count% sekundes|prieš %count% sekundžių</target>
+                <target> sekundę| %count% sekundes| %count% sekundžių</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>diff.empty</source>

@@ -117,16 +117,31 @@ class DefaultController extends Controller
 
         $repository = $this->getDoctrine()->getRepository('AppBundle:Problem');
 
-        $query = $repository->createQueryBuilder('p')
+        $queryNotFixed = $repository->createQueryBuilder('p')
             ->where('p.creator =' . $user->getId())
+            ->where('p.state = 1')
             ->getQuery();
 
-        $problems = $query->getResult();
+        $queryFixing = $repository->createQueryBuilder('p')
+            ->where('p.creator =' . $user->getId())
+            ->where('p.state = 2')
+            ->getQuery();
+
+        $queryFixed = $repository->createQueryBuilder('p')
+            ->where('p.creator =' . $user->getId())
+            ->where('p.state = 3')
+            ->getQuery();
+
+        $problemsNotFixed = $queryNotFixed->getResult();
+        $problemsFixing = $queryFixing->getResult();
+        $problemsFixed = $queryFixed->getResult();
 
         //$problems = $repository->findAll();
         // replace this example code with whatever you need
         return $this->render('default/createdProblems.html.twig', array(
-            'problems' => $problems,
+            'problemsNotFixed' => $problemsNotFixed,
+            'problemsFixing' => $problemsFixing,
+            'problemsFixed' => $problemsFixed
         ));
     }
 
@@ -176,6 +191,7 @@ class DefaultController extends Controller
         $report = new Report();
         $report->setTimeCreated($time);
         $report->setProblem($problem);
+        $report->setTechnician($user);
 
         $form = $this->createFormBuilder($report)
             ->add('cause', TextareaType::class)
@@ -310,6 +326,36 @@ class DefaultController extends Controller
         return $this->render('default/reports.html.twig', array(
             'reports' => $reports,
         ));
+    }
 
+    /**
+     * @Route("/technicianReports/{tehnicianId}", name="technicianReports")
+     */
+    public function technicianReports(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
+        if($user == null || !in_array("ROLE_MANAGER", $roles))
+        {
+            return $this->redirect('/');
+        }
+
+        $technicianId = $request->attributes->get('tehnicianId');
+        $doctrine = $this->getDoctrine();
+        $reportRepository = $doctrine->getRepository('AppBundle:Report');
+        $userRepository = $doctrine->getRepository('AppBundle:User');
+        $technician = $userRepository->find($technicianId);
+
+        $query = $reportRepository->createQueryBuilder('p')
+            ->where('p.technician = '. $technicianId)
+            ->getQuery();
+
+        $technicianReports = $query->getResult();
+
+        return $this->render('default/reports.html.twig', array(
+            'reports' => $technicianReports,
+            'technicianData' => $technician
+        ));
     }
 }

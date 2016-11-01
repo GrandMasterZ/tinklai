@@ -2,9 +2,14 @@
 
 {% block body %}
     <div class="container">
+        {% if technicianData is defined %}
+            <h1> Jūs žiurite techniko {{ technicianData.name }} {{ technicianData.surname }} ataskaitas</h1>
+        {% endif %}
+        <h1> Ataskaitos </h1>
         {% for report in reports %}
             <div class="col-md-4">
                 <div class="well">
+                    <p> Sukurimo data: {{ report.time_created | date("Y/m/d") }}</p>
                     <p> Įrangos pavadinimas: {{ report.problem.hardware_name }}</p>
                     <p> Ip adresas: {{ report.problem.ip }}</p>
                     <p> Problemos aprašymas:</p>
@@ -15,6 +20,9 @@
                     <p>Įrenginys neveikė {{ time_diff(report.problem.time_created, report.problem.time_fixed) }} </p>
                     <p> Iki pastebėjimo praėjo {{ time_diff(report.problem.time_created, report.problem.time_taken) }}</p>
                     <p> Iki sutaisymo praėjo {{ time_diff(report.problem.time_taken, report.problem.time_fixed) }}</p>
+                    <hr>
+                    <p> Sutaisė technikas: {{ report.technician.name }} {{ report.technician.surname }} ({{ report.technician.username }})</p>
+                    <a href="/technicianReports/{{ report.technician.id }}"> Visos šio techniko ataskaitos </a>
                 </div>
             </div>
         {% endfor %}

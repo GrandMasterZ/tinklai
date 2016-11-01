@@ -2,20 +2,65 @@
 
 {% block body %}
 
-    {% for problem in problems %}
-        <div class="col-md-3">
-            <div class="well">
-                <p> Įrenginio vardas: {{ problem.hardware_name }} </p>
-                <p> Problemos aprašymas:</p>
-                <p style="height:75px;"> {{ problem.description }} </p>
-                <p> Ip numeris: {{ problem.ip }} </p>
-                <a href="/editProblem/{{ problem.id }}" class="btn btn-default"> Keisti </a>
-                <a href="/deleteProblem/{{ problem.id }}" class="btn btn-danger"> Šalinti </a>
-            </div>
-        </div>
-    {% endfor %}
+    {% if problemsNotFixed != null %}
+        <h1> Nesutaisytos problemos </h1>
+        <hr>
+    {% endif %}
 
-    {% if problems == null %}
+    <div style="margin-left: 15px;" class="row">
+        {% for problem in problemsNotFixed %}
+            <div class="col-md-3">
+                <div class="well">
+                    <p> Įrenginio vardas: {{ problem.hardware_name }} </p>
+                    <p> Problemos aprašymas:</p>
+                    <p style="height:75px;"> {{ problem.description }} </p>
+                    <p> Ip numeris: {{ problem.ip }} </p>
+                    <a href="/editProblem/{{ problem.id }}" class="btn btn-default"> Keisti </a>
+                    <a href="/deleteProblem/{{ problem.id }}" class="btn btn-danger"> Šalinti </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if problemsFixing != null %}
+        <h1> Tvarkomos problemos </h1>
+        <hr>
+    {% endif %}
+
+    <div style="margin-left: 15px;" class="row">
+        {% for problem in problemsFixing %}
+            <div class="col-md-3">
+                <div class="well">
+                    <p> Įrenginio vardas: {{ problem.hardware_name }} </p>
+                    <p> Problemos aprašymas:</p>
+                    <p style="height:75px;"> {{ problem.description }} </p>
+                    <p> Ip numeris: {{ problem.ip }} </p>
+                    <a href="/editProblem/{{ problem.id }}" class="btn btn-default"> Keisti </a>
+                    <a href="/deleteProblem/{{ problem.id }}" class="btn btn-danger"> Šalinti </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if problemsFixed != null %}
+        <h1> Sutvarkytos problemos </h1>
+        <hr>
+    {% endif %}
+
+    <div style="margin-left: 15px;" class="row">
+        {% for problem in problemsFixed %}
+            <div class="col-md-3">
+                <div class="well">
+                    <p> Įrenginio vardas: {{ problem.hardware_name }} </p>
+                    <p> Problemos aprašymas:</p>
+                    <p style="height:75px;"> {{ problem.description }} </p>
+                    <p> Ip numeris: {{ problem.ip }} </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if problemsNotFixed == null and  problemsFixing == null and problemsFixed == null %}
         <h1> Nesukūrėte jokių problemų </h1>
     {% endif %}
 

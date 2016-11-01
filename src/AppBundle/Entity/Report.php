@@ -30,13 +30,35 @@ class Report
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $time_created;
+    public $time_created;
 
     /**
      * @ORM\ManyToOne(targetEntity="Problem")
      * @ORM\JoinColumn(name="problem_id", referencedColumnName="id")
      */
     private $problem;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="technician_id", referencedColumnName="id")
+     */
+    private $technician;
+
+    /**
+     * @return mixed
+     */
+    public function getTechnician()
+    {
+        return $this->technician;
+    }
+
+    /**
+     * @param mixed $technician
+     */
+    public function setTechnician($technician)
+    {
+        $this->technician = $technician;
+    }
 
     /**
      * @return mixed

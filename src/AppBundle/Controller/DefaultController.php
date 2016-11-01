@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Problem;
+use AppBundle\Mapper\TechnicianMapper;
 use AppBundle\Entity\Report;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -358,4 +359,48 @@ class DefaultController extends Controller
             'technicianData' => $technician
         ));
     }
+
+    /**
+     * @Route("/technicians", name="technicianList")
+     */
+    public function technicianList(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
+        if($user == null || !in_array("ROLE_MANAGER", $roles))
+        {
+            return $this->redirect('/');
+        }
+
+        $doctrine = $this->getDoctrine();
+        $userRepository = $doctrine->getRepository('AppBundle:User');
+        $reportRepository = $doctrine->getRepository('AppBundle:Report');
+        $users = $userRepository->findAll();
+        $technicians = [];
+        foreach ($users as $technician)
+        {
+            $technician_mapper = new TechnicianMapper();
+            $technician_mapper->technician_data = $technician;
+
+            $query = $reportRepository->createQueryBuilder('p')
+                ->select('count(p.id)')
+                ->where('p.technician = '. $technician->getId())
+                ->getQuery();
+
+            $reportCount = $query->getResult();
+            $technician_mapper->reportCount = $reportCount[0][1];
+            array_push($technicians, $technician_mapper);
+        }
+
+        usort($technicians, function ($a, $b)
+        {
+            return strcmp($b->reportCount, $a->reportCount);
+        });
+
+        return $this->render('default/technicians.html.twig', array(
+            'technicians' => $technicians
+        ));
+    }
 }
+

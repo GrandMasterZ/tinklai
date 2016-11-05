@@ -171,6 +171,7 @@ class DefaultController extends Controller
     public function newReport(Request $request)
     {
         $user = $this->getUser();
+        $roles = $user->getRoles();
         $time = new \DateTime();
         $stateRepository = $this->getDoctrine()->getRepository('AppBundle:State');
         $state = $stateRepository->find(3);
@@ -180,7 +181,7 @@ class DefaultController extends Controller
             return $this->redirect('/');
         }
 
-        if($user == null)
+        if($user == null || !in_array("ROLE_OPERATOR", $roles))
         {
             return $this->redirect('/login');
         }
@@ -226,7 +227,7 @@ class DefaultController extends Controller
      */
     public function takeProblem(Request $request)
     {
-        if($this->getUser()->getProblem() == null)
+        if($this->getUser()->getProblem() == null || !in_array("ROLE_TECHNICIAN", $this->getUser()->getRoles()))
         {
             $doctrine = $this->getDoctrine();
             $stateRepository = $doctrine->getRepository('AppBundle:State');

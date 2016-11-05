@@ -105,6 +105,71 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/deleteProblem/{problemId}", name="delete")
+     */
+    public function deleteProblem(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+        $problemId = $request->attributes->get('problemId');
+
+        if($user == null || !in_array("ROLE_OPERATOR", $roles))
+        {
+            return $this->redirect('/login');
+        }
+
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Problem');
+        $problem = $repository->find($problemId);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($problem);
+        $em->flush();
+
+        return $this->redirect('/createdProblems');
+    }
+
+    /**
+     * @Route("/editProblem/{problemId}", name="edit")
+     */
+    public function editProblem(Request $request)
+    {
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+        $problemId = $request->attributes->get('problemId');
+
+        if($user == null || !in_array("ROLE_OPERATOR", $roles))
+        {
+            return $this->redirect('/login');
+        }
+
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Problem');
+        $problem = $repository->find($problemId);
+
+        $form = $this->createFormBuilder($problem)
+            ->add('hardware_name', TextType::class)
+            ->add('description', TextareaType::class)
+            ->add('ip', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Išsaugoti'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $problem = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($problem);
+            $em->flush();
+
+            return $this->redirect('/createdProblems');
+        }
+
+        return $this->render('default/newProblem.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
      * @Route("/createdProblems", name="createdProblemList")
      */
     public function viewCreatedProblems(Request $request)
